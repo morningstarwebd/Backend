@@ -310,5 +310,6 @@ module.exports = {
     logout,
     verifyToken: verifyTokenEndpoint,
     getMe,
-    changePassword
+    changePassword,
+    publicRegister
 };
