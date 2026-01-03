@@ -15,6 +15,7 @@ const PublicLayout = ({ children }) => {
                     {/* Desktop Navigation */}
                     <div className="public-nav-links desktop-only">
                         <Link to="/" className="public-nav-link">Home</Link>
+                        <Link to="/funds" className="public-nav-link">Funds</Link>
                         <Link to="/contact" className="public-nav-link">Contact</Link>
                         <Link to="/admin/login" className="btn btn-primary public-nav-btn">Admin</Link>
                     </div>
@@ -36,6 +37,7 @@ const PublicLayout = ({ children }) => {
                     <div className="mobile-nav-overlay" onClick={() => setMobileMenuOpen(false)}>
                         <div className="mobile-nav-menu" onClick={(e) => e.stopPropagation()}>
                             <Link to="/" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+                            <Link to="/funds" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Funds</Link>
                             <Link to="/contact" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                             <Link to="/admin/login" className="btn btn-primary mobile-nav-btn" onClick={() => setMobileMenuOpen(false)}>Admin Login</Link>
                         </div>

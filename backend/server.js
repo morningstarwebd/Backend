@@ -144,6 +144,7 @@ app.use('/api/images', uploadRoutes);
 app.use('/api/public/contact', require('./routes/public/contactRoutes'));
 app.use('/api/admin/contact', require('./routes/admin/contactRoutes'));
 app.use('/api/stats', statsRoutes);
+app.use('/api/fund', require('./routes/fundRoutes'));
 
 // Root endpoint
 app.get('/', (req, res) => {

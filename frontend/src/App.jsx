@@ -13,6 +13,7 @@ import PublicLayout from './layouts/PublicLayout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import PublicContact from './pages/PublicContact';
+import Fund from './pages/Fund';
 import Dashboard from './pages/Dashboard';
 import ProductManager from './pages/ProductManager';
 import BlogManager from './pages/BlogManager';
@@ -52,6 +53,11 @@ function App() {
           <Route path="/contact" element={
             <PublicLayout>
               <PublicContact />
+            </PublicLayout>
+          } />
+          <Route path="/funds" element={
+            <PublicLayout>
+              <Fund />
             </PublicLayout>
           } />
 
