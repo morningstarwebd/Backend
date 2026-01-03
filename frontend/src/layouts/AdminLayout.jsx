@@ -38,7 +38,7 @@ const AdminLayout = ({ children }) => {
                     <span></span>
                     <span></span>
                 </button>
-                <h2 className="gradient-text" style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Admin</h2>
+                <h2 className="gradient-text" style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Admin Panel</h2>
                 <div style={{ width: '40px' }}></div>
             </div>
 
