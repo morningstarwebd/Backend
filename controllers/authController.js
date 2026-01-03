@@ -123,8 +123,9 @@ const login = async (req, res) => {
             token
         }, 'Login successful');
     } catch (error) {
-        console.error('Login error:', error.message);
-        return errorResponse(res, 'Login failed', 500);
+        console.error('Login error:', error.message, error.stack);
+        // Return actual error message for debugging (remove in production)
+        return errorResponse(res, `Login failed: ${error.message}`, 500);
     }
 };
 
