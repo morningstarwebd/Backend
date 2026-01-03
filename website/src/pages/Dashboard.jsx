@@ -26,8 +26,14 @@ const Dashboard = () => {
             return;
         }
 
-        setUser(JSON.parse(storedUser));
-        fetchMessages();
+        try {
+            setUser(JSON.parse(storedUser));
+            fetchMessages();
+        } catch (e) {
+            console.error('Failed to parse user', e);
+            localStorage.removeItem('user');
+            navigate('/login');
+        }
     }, [navigate]);
 
     const fetchMessages = async () => {

@@ -11,7 +11,13 @@ const MainLayout = ({ children }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (e) {
+                console.error('Failed to parse user', e);
+                localStorage.removeItem('user');
+                setUser(null);
+            }
         } else {
             setUser(null);
         }
