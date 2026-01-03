@@ -56,7 +56,9 @@ const AdminLayout = ({ children }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     position: 'fixed',
-                    height: '100vh',
+                    height: '100dvh',
+                    maxHeight: '-webkit-fill-available',
+                    overflowY: 'auto',
                     zIndex: 1000,
                     borderRight: '1px solid rgba(255,255,255,0.1)'
                 }}>

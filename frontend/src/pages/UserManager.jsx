@@ -53,7 +53,7 @@ const UserManager = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/auth/register', formData);
+            await api.post('/users', formData);
             toast.success('Admin user created successfully');
             setIsModalOpen(false);
             fetchUsers();
@@ -146,7 +146,6 @@ const UserManager = () => {
                                             onClick={() => handleDelete(user.id)}
                                             className="btn-outline"
                                             style={{ padding: '0.5rem', color: '#ef4444', borderColor: 'rgba(239,68,68,0.2)' }}
-                                            disabled={user.role === 'super_admin'}
                                         >
                                             <FaTrash />
                                         </button>
