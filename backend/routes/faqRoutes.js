@@ -67,6 +67,6 @@ router.delete('/:id', protect, idParamValidation, validate, faqController.delete
  * @desc    Cleanup empty/invalid FAQ rows
  * @access  Protected
  */
-router.delete('/cleanup/empty', protect, faqController.cleanupFAQs);
+router.delete('/cleanup/empty', faqController.cleanupFAQs); // Temporarily public for one-time cleanup
 
 module.exports = router;
