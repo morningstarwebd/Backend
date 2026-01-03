@@ -74,6 +74,67 @@ const register = async (req, res) => {
 };
 
 /**
+ * Register a new public user (self-registration)
+ * POST /api/auth/register/public
+ */
+const publicRegister = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+        // Force role to be 'user'
+        const role = 'user';
+
+        // Check if email already exists
+        const emailExists = await exists(SHEETS.ADMIN_USERS, 'email', email);
+        if (emailExists) {
+            return errorResponse(res, 'Email already registered', 409);
+        }
+
+        // Check if username already exists
+        const usernameExists = await exists(SHEETS.ADMIN_USERS, 'username', username);
+        if (usernameExists) {
+            return errorResponse(res, 'Username already taken', 409);
+        }
+
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const password_hash = await bcrypt.hash(password, salt);
+
+        // Create user data
+        const userData = {
+            id: generateId('usr'),
+            username,
+            email,
+            password_hash,
+            role,
+            status: 'active',
+            last_login: '',
+            created_at: new Date().toISOString()
+        };
+
+        // Save to Google Sheets
+        await create(SHEETS.ADMIN_USERS, userData);
+
+        // Generate token
+        const token = generateToken({
+            id: userData.id,
+            email: userData.email,
+            role: userData.role
+        });
+
+        // Return user data without password
+        const { password_hash: _, ...userWithoutPassword } = userData;
+
+        return createdResponse(res, {
+            user: userWithoutPassword,
+            token
+        }, 'Registration successful');
+    } catch (error) {
+        console.error('Public Register error:', error.message);
+        return errorResponse(res, 'Registration failed', 500);
+    }
+};
+
+/**
  * Login user
  * POST /api/auth/login
  */

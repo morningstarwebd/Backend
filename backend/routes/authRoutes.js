@@ -14,6 +14,7 @@ const {
     loginValidation,
     changePasswordValidation
 } = require('../utils/validation');
+const roleCheck = require('../middleware/roleCheck');
 
 // Apply sanitization to all routes
 router.use(sanitizeBody);
@@ -23,7 +24,14 @@ router.use(sanitizeBody);
  * @desc    Register a new admin user
  * @access  Protected (requires existing admin)
  */
-router.post('/register', protect, registerValidation, validate, authController.register);
+router.post('/register', protect, roleCheck(['super_admin']), registerValidation, validate, authController.register);
+
+/**
+ * @route   POST /api/auth/register/public
+ * @desc    Register a new user (public)
+ * @access  Public
+ */
+router.post('/register/public', registerValidation, validate, authController.publicRegister);
 
 /**
  * @route   POST /api/auth/login
