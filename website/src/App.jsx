@@ -10,6 +10,11 @@ import Home from './pages/Home';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Dashboard from './pages/Dashboard';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Products from './pages/Products';
+import Blogs from './pages/Blogs';
+import FAQ from './pages/FAQ';
 
 // Global Styles
 import './index.css';
@@ -23,6 +28,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/blog" element={<Blogs />} />
+          <Route path="/faq" element={<FAQ />} />
           {/* Add more routes as needed */}
         </Routes>
       </MainLayout>

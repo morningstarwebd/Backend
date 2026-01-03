@@ -45,6 +45,8 @@ const MainLayout = ({ children }) => {
                     <div className="public-nav-links desktop-only">
                         <Link to="/" className={`public-nav-link ${isActive('/') ? 'active' : ''}`}>Home</Link>
                         <Link to="/about" className={`public-nav-link ${isActive('/about') ? 'active' : ''}`}>About</Link>
+                        <Link to="/products" className={`public-nav-link ${isActive('/products') ? 'active' : ''}`}>Products</Link>
+                        <Link to="/blog" className={`public-nav-link ${isActive('/blog') ? 'active' : ''}`}>Blog</Link>
                         <Link to="/contact" className={`public-nav-link ${isActive('/contact') ? 'active' : ''}`}>Contact</Link>
                         <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.1)', margin: '0 1rem' }}></div>
                         {user ? (
@@ -76,6 +78,9 @@ const MainLayout = ({ children }) => {
                         <div className="mobile-nav-menu" onClick={(e) => e.stopPropagation()}>
                             <Link to="/" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Home</Link>
                             <Link to="/about" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>About</Link>
+                            <Link to="/products" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Products</Link>
+                            <Link to="/blog" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
+                            <Link to="/faq" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>FAQ</Link>
                             <Link to="/contact" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                             <hr style={{ width: '100%', borderColor: 'rgba(255,255,255,0.1)' }} />
                             {user ? (
@@ -112,6 +117,9 @@ const MainLayout = ({ children }) => {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                 <Link to="/" style={{ color: 'var(--text-dim)' }}>Home</Link>
                                 <Link to="/about" style={{ color: 'var(--text-dim)' }}>About Us</Link>
+                                <Link to="/products" style={{ color: 'var(--text-dim)' }}>Products</Link>
+                                <Link to="/blog" style={{ color: 'var(--text-dim)' }}>Blog</Link>
+                                <Link to="/faq" style={{ color: 'var(--text-dim)' }}>FAQ</Link>
                                 <Link to="/contact" style={{ color: 'var(--text-dim)' }}>Contact</Link>
                             </div>
                         </div>
