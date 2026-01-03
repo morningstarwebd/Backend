@@ -41,3 +41,5 @@ uploads/
 # Google credentials (if stored as file)
 google-credentials.json
 service-account.json
+.vercel
+.env*.local
