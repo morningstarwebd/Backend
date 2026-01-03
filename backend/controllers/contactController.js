@@ -21,8 +21,12 @@ const submitContactForm = async (req, res) => {
     try {
         const { name, email, phone, subject, message } = req.body;
 
+        // Get user_id if authenticated
+        const user_id = req.user ? req.user.id : '';
+
         const messageData = {
             id: generateId('con'),
+            user_id,
             name,
             email,
             phone: phone || '',
@@ -39,6 +43,30 @@ const submitContactForm = async (req, res) => {
     } catch (error) {
         console.error('Submit contact form error:', error.message);
         return errorResponse(res, 'Failed to send message', 500);
+    }
+};
+
+/**
+ * Get current user's messages
+ * GET /api/contact/my-messages
+ */
+const getMyMessages = async (req, res) => {
+    try {
+        const { page = 1, limit = 10 } = req.query;
+        const user_id = req.user.id;
+
+        const result = await getAll(SHEETS.CONTACT_MESSAGES, {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            sortBy: 'created_at',
+            sortOrder: 'desc',
+            filters: { user_id }
+        });
+
+        return successResponse(res, result, 'Messages retrieved successfully');
+    } catch (error) {
+        console.error('Get my messages error:', error.message);
+        return errorResponse(res, 'Failed to retrieve your messages', 500);
     }
 };
 
@@ -251,6 +279,7 @@ const bulkUpdateStatus = async (req, res) => {
 module.exports = {
     submitContactForm,
     getAllMessages,
+    getMyMessages,
     getMessageById,
     updateMessageStatus,
     deleteMessage,

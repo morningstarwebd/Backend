@@ -34,7 +34,7 @@ const SHEET_HEADERS = {
     [SHEETS.TESTIMONIALS]: ['id', 'name', 'designation', 'review', 'rating', 'image_url', 'status', 'order', 'created_at'],
     [SHEETS.FAQS]: ['id', 'question', 'answer', 'category', 'order', 'status', 'created_at'],
     [SHEETS.IMAGES]: ['id', 'filename', 'url', 'cloudinary_id', 'size', 'width', 'height', 'format', 'upload_date'],
-    [SHEETS.CONTACT_MESSAGES]: ['id', 'name', 'email', 'phone', 'subject', 'message', 'status', 'created_at'],
+    [SHEETS.CONTACT_MESSAGES]: ['id', 'user_id', 'name', 'email', 'phone', 'subject', 'message', 'status', 'created_at'],
     [SHEETS.FUNDS]: ['id', 'name', 'email', 'phone', 'amount', 'message', 'status', 'created_at']
 };
 
