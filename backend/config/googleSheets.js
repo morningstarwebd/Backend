@@ -104,7 +104,22 @@ function getSpreadsheetId() {
 
 // Simple in-memory cache
 const sheetCache = {};
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 30 * 1000; // 30 seconds for faster admin updates
+
+/**
+ * Clear cache for a specific sheet (call after create/update/delete)
+ * @param {string} sheetName - Name of the sheet to clear cache for
+ */
+function clearCacheForSheet(sheetName) {
+    delete sheetCache[sheetName];
+}
+
+/**
+ * Clear all cache
+ */
+function clearAllCache() {
+    Object.keys(sheetCache).forEach(key => delete sheetCache[key]);
+}
 
 /**
  * Get all data from a sheet
@@ -382,5 +397,7 @@ module.exports = {
     deleteRow,
     findById,
     findByField,
-    initializeSheet
+    initializeSheet,
+    clearCacheForSheet,
+    clearAllCache
 };

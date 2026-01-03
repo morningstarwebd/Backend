@@ -11,7 +11,8 @@ const {
     updateRow,
     deleteRow,
     findById,
-    findByField
+    findByField,
+    clearCacheForSheet
 } = require('../config/googleSheets');
 const { generateId } = require('./generateId');
 
@@ -129,6 +130,7 @@ async function create(sheetName, data) {
         };
 
         await appendRow(sheetName, newData);
+        clearCacheForSheet(sheetName); // Invalidate cache immediately
         return newData;
     } catch (error) {
         console.error(`Error in create for ${sheetName}:`, error.message);
@@ -160,6 +162,7 @@ async function update(sheetName, id, updates) {
         };
 
         await updateRow(sheetName, result.rowIndex, updatedData);
+        clearCacheForSheet(sheetName); // Invalidate cache immediately
         return updatedData;
     } catch (error) {
         console.error(`Error in update for ${sheetName}:`, error.message);
@@ -182,6 +185,7 @@ async function remove(sheetName, id) {
         }
 
         await deleteRow(sheetName, result.rowIndex);
+        clearCacheForSheet(sheetName); // Invalidate cache immediately
         return true;
     } catch (error) {
         console.error(`Error in remove for ${sheetName}:`, error.message);
