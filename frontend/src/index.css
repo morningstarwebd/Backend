@@ -337,6 +337,8 @@ button {
   .mobile-card-table td {
     display: block !important;
     width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
   }
 
   .mobile-card-table tr {
@@ -345,6 +347,7 @@ button {
     border-radius: 0.5rem !important;
     background: rgba(30, 41, 59, 0.4) !important;
     padding: 1rem !important;
+    overflow: hidden !important;
   }
 
   .mobile-card-table td {
@@ -356,6 +359,10 @@ button {
     justify-content: space-between !important;
     align-items: center !important;
     min-height: 40px !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
   }
 
   .mobile-card-table td:last-child {
@@ -372,6 +379,15 @@ button {
     text-transform: uppercase !important;
     font-size: 0.75rem !important;
     margin-right: 1rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Limit text width and add ellipsis for very long content */
+  .mobile-card-table td>span,
+  .mobile-card-table td>div {
+    max-width: 60% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 }
 
