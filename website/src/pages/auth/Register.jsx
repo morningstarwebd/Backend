@@ -35,8 +35,8 @@ const Register = () => {
             });
 
             // Auto Login
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
+            localStorage.setItem('token', response.data.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.data.user));
 
             toast.success('Registration successful! Welcome!');
             navigate('/dashboard');
