@@ -27,7 +27,9 @@ const FAQManager = () => {
         try {
             const response = await api.get('/faq');
             if (response.data.success) {
-                setFaqs(response.data.data);
+                // API returns {flat: [...], grouped: {...}} structure
+                const faqData = response.data.data?.flat || response.data.data || [];
+                setFaqs(faqData);
             }
         } catch (error) {
             toast.error('Failed to fetch FAQs');
@@ -82,14 +84,14 @@ const FAQManager = () => {
         setIsModalOpen(true);
     };
 
-    const filteredFaqs = faqs.filter(f =>
-        f.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        f.answer.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredFaqs = (Array.isArray(faqs) ? faqs : []).filter(f =>
+        f.question?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        f.answer?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <h1 className="gradient-text" style={{ fontSize: '2rem' }}>FAQ Manager</h1>
                 <button
                     onClick={() => { resetForm(); setIsModalOpen(true); }}
@@ -122,8 +124,8 @@ const FAQManager = () => {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <div className="glass" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div className="glass" style={{ borderRadius: '1rem', overflowX: 'auto' }}>
+                    <table className="mobile-card-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(255,255,255,0.05)', textAlign: 'left' }}>
                                 <th style={{ padding: '1rem' }}>Order</th>
@@ -135,9 +137,9 @@ const FAQManager = () => {
                         <tbody>
                             {filteredFaqs.map(faq => (
                                 <tr key={faq.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <td style={{ padding: '1rem' }}>{faq.order}</td>
-                                    <td style={{ padding: '1rem', fontWeight: 'bold' }}>{faq.question}</td>
-                                    <td style={{ padding: '1rem' }}>
+                                    <td data-label="Order" style={{ padding: '1rem' }}>{faq.order}</td>
+                                    <td data-label="Question" style={{ padding: '1rem', fontWeight: 'bold' }}>{faq.question}</td>
+                                    <td data-label="Category" style={{ padding: '1rem' }}>
                                         <span style={{
                                             padding: '0.25rem 0.75rem',
                                             borderRadius: '1rem',
@@ -148,7 +150,7 @@ const FAQManager = () => {
                                             {faq.category}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                    <td data-label="Actions" style={{ padding: '1rem', textAlign: 'right' }}>
                                         <button
                                             onClick={() => openEditModal(faq)}
                                             className="btn-outline"

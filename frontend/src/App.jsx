@@ -7,10 +7,12 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Layouts
 import AdminLayout from './layouts/AdminLayout';
+import PublicLayout from './layouts/PublicLayout';
 
 // Pages
 import Home from './pages/Home';
 import Login from './pages/Login';
+import PublicContact from './pages/PublicContact';
 import Dashboard from './pages/Dashboard';
 import ProductManager from './pages/ProductManager';
 import BlogManager from './pages/BlogManager';
@@ -42,7 +44,17 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={
+            <PublicLayout>
+              <Home />
+            </PublicLayout>
+          } />
+          <Route path="/contact" element={
+            <PublicLayout>
+              <PublicContact />
+            </PublicLayout>
+          } />
+
           <Route path="/admin/login" element={<Login />} />
 
           {/* Protected Routes */}

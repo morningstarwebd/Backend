@@ -40,7 +40,11 @@ const SHEET_HEADERS = {
  * Initialize Google Sheets API client
  * @returns {Promise<Object>} Google Sheets API instance
  */
+let cachedSheetsClient = null;
+
 async function getGoogleSheetsClient() {
+    if (cachedSheetsClient) return cachedSheetsClient;
+
     try {
         // Try keyFile first (recommended), then fall back to env credentials
         const keyFilePath = path.join(__dirname, 'google-credentials.json');
@@ -56,7 +60,16 @@ async function getGoogleSheetsClient() {
             });
         } else {
             // Fallback to environment variables
-            const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+            let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+            if (privateKey) {
+                // If the key is wrapped in quotes, remove them
+                if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+                    privateKey = privateKey.slice(1, -1);
+                }
+                // Replace literal \n with actual newlines
+                privateKey = privateKey.replace(/\\n/g, '\n');
+            }
+
             auth = new google.auth.GoogleAuth({
                 credentials: {
                     client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
@@ -67,12 +80,13 @@ async function getGoogleSheetsClient() {
         }
 
         const authClient = await auth.getClient();
-        const sheets = google.sheets({ version: 'v4', auth: authClient });
+        cachedSheetsClient = google.sheets({ version: 'v4', auth: authClient });
 
-        return sheets;
+        return cachedSheetsClient;
     } catch (error) {
         console.error('Error initializing Google Sheets client:', error.message);
-        throw new Error('Failed to initialize Google Sheets API');
+        // Throw actual error for debugging
+        throw new Error(`Failed to initialize Google Sheets API: ${error.message}`);
     }
 }
 

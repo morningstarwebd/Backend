@@ -1,62 +1,50 @@
-/**
- * Contact Routes
- * Routes for contact form and message management
- */
-
 const express = require('express');
 const router = express.Router();
-const contactController = require('../controllers/contactController');
-const { protect } = require('../middleware/auth');
-const { validate, sanitizeBody } = require('../middleware/validation');
-const { contactValidation, idParamValidation, paginationValidation } = require('../utils/validation');
+const contactController = require('../../controllers/contactController');
+const { protect } = require('../../middleware/auth');
+const { validate, sanitizeBody } = require('../../middleware/validation');
+const { idParamValidation, paginationValidation } = require('../../utils/validation');
 
 // Apply sanitization to all routes
 router.use(sanitizeBody);
 
 /**
- * @route   POST /api/contact
- * @desc    Submit contact form
- * @access  Public
- */
-router.post('/', contactValidation, validate, contactController.submitContactForm);
-
-/**
- * @route   GET /api/contact
+ * @route   GET /api/admin/contact
  * @desc    Get all contact messages
  * @access  Protected
  */
 router.get('/', protect, paginationValidation, validate, contactController.getAllMessages);
 
 /**
- * @route   GET /api/contact/:id
+ * @route   GET /api/admin/contact/:id
  * @desc    Get single message
  * @access  Protected
  */
 router.get('/:id', protect, idParamValidation, validate, contactController.getMessageById);
 
 /**
- * @route   PUT /api/contact/bulk-status
+ * @route   PUT /api/admin/contact/bulk-status
  * @desc    Bulk update message status
  * @access  Protected
  */
 router.put('/bulk-status', protect, contactController.bulkUpdateStatus);
 
 /**
- * @route   PUT /api/contact/:id/status
+ * @route   PUT /api/admin/contact/:id/status
  * @desc    Update message status
  * @access  Protected
  */
 router.put('/:id/status', protect, idParamValidation, validate, contactController.updateMessageStatus);
 
 /**
- * @route   DELETE /api/contact
+ * @route   DELETE /api/admin/contact
  * @desc    Bulk delete messages
  * @access  Protected
  */
 router.delete('/', protect, contactController.bulkDeleteMessages);
 
 /**
- * @route   DELETE /api/contact/:id
+ * @route   DELETE /api/admin/contact/:id
  * @desc    Delete single message
  * @access  Protected
  */

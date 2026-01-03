@@ -5,6 +5,7 @@ import {
     FaHome, FaBox, FaPen, FaList, FaCog, FaSignOutAlt, FaTimes,
     FaUserFriends, FaQuestionCircle, FaEnvelope, FaChartBar, FaBars
 } from 'react-icons/fa';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const AdminLayout = ({ children }) => {
     const { user, logout } = useAuth();
@@ -27,7 +28,7 @@ const AdminLayout = ({ children }) => {
     return (
         <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
             {/* Mobile Header */}
-            <div className="mobile-header mobile-only" style={{ display: 'none' }}>
+            <div className="mobile-header mobile-only">
                 <button
                     className="hamburger-btn"
                     onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -71,8 +72,7 @@ const AdminLayout = ({ children }) => {
                             border: 'none',
                             color: 'var(--text-dim)',
                             fontSize: '1.25rem',
-                            cursor: 'pointer',
-                            display: 'none'
+                            cursor: 'pointer'
                         }}
                     >
                         <FaTimes />
@@ -139,7 +139,9 @@ const AdminLayout = ({ children }) => {
                     minHeight: '100vh'
                 }}>
                     <div className="container">
-                        {children}
+                        <ErrorBoundary>
+                            {children}
+                        </ErrorBoundary>
                     </div>
                 </div>
             </div>

@@ -55,13 +55,13 @@ const Dashboard = () => {
     if (loading) return <div>Loading dashboard...</div>;
 
     const cards = [
-        { title: 'Total Users', value: stats?.counts?.users || 0, icon: <FaUser />, color: '99, 102, 241' },
-        { title: 'Products', value: stats?.counts?.products || 0, icon: <FaBoxOpen />, color: '236, 72, 153' },
-        { title: 'Blog Posts', value: stats?.counts?.posts || 0, icon: <FaNewspaper />, color: '20, 184, 166' },
-        { title: 'Messages', value: stats?.counts?.messages || 0, icon: <FaEnvelope />, color: '245, 158, 11' },
-        { title: 'Categories', value: stats?.counts?.categories || 0, icon: <FaList />, color: '139, 92, 246' },
-        { title: 'Testimonials', value: stats?.counts?.testimonials || 0, icon: <FaStar />, color: '234, 179, 8' },
-        { title: 'FAQs', value: stats?.counts?.faqs || 0, icon: <FaQuestionCircle />, color: '59, 130, 246' },
+        { title: 'Total Users', value: stats?.overview?.totalUsers || 0, icon: <FaUser />, color: '99, 102, 241' },
+        { title: 'Products', value: stats?.overview?.totalProducts || 0, icon: <FaBoxOpen />, color: '236, 72, 153' },
+        { title: 'Blog Posts', value: stats?.overview?.totalBlogs || 0, icon: <FaNewspaper />, color: '20, 184, 166' },
+        { title: 'Messages', value: stats?.overview?.totalMessages || 0, icon: <FaEnvelope />, color: '245, 158, 11' },
+        { title: 'Categories', value: stats?.overview?.totalCategories || 0, icon: <FaList />, color: '139, 92, 246' },
+        { title: 'Testimonials', value: stats?.overview?.totalTestimonials || 0, icon: <FaStar />, color: '234, 179, 8' },
+        { title: 'FAQs', value: stats?.overview?.totalFAQs || 0, icon: <FaQuestionCircle />, color: '59, 130, 246' },
     ];
 
     return (

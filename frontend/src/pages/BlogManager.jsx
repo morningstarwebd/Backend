@@ -28,7 +28,7 @@ const BlogManager = () => {
         try {
             const response = await api.get('/blog');
             if (response.data.success) {
-                setPosts(response.data.data.data);
+                setPosts(response.data.data || []);
             }
         } catch (error) {
             toast.error('Failed to fetch blog posts');
@@ -87,14 +87,14 @@ const BlogManager = () => {
         setIsModalOpen(true);
     };
 
-    const filteredPosts = posts.filter(p =>
-        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredPosts = (Array.isArray(posts) ? posts : []).filter(p =>
+        p.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.category?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <h1 className="gradient-text" style={{ fontSize: '2rem' }}>Blog Manager</h1>
                 <button
                     onClick={() => { resetForm(); setIsModalOpen(true); }}
@@ -127,8 +127,8 @@ const BlogManager = () => {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <div className="glass" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div className="glass" style={{ borderRadius: '1rem', overflowX: 'auto' }}>
+                    <table className="mobile-card-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(255,255,255,0.05)', textAlign: 'left' }}>
                                 <th style={{ padding: '1rem' }}>Title</th>
@@ -141,8 +141,8 @@ const BlogManager = () => {
                         <tbody>
                             {filteredPosts.map(post => (
                                 <tr key={post.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <td style={{ padding: '1rem' }}>{post.title}</td>
-                                    <td style={{ padding: '1rem' }}>
+                                    <td data-label="Title" style={{ padding: '1rem' }}>{post.title}</td>
+                                    <td data-label="Category" style={{ padding: '1rem' }}>
                                         <span style={{
                                             padding: '0.25rem 0.75rem',
                                             borderRadius: '1rem',
@@ -164,8 +164,8 @@ const BlogManager = () => {
                                             {post.status}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem' }}>{post.views}</td>
-                                    <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                    <td data-label="Views" style={{ padding: '1rem' }}>{post.views}</td>
+                                    <td data-label="Actions" style={{ padding: '1rem', textAlign: 'right' }}>
                                         <button
                                             onClick={() => openEditModal(post)}
                                             className="btn-outline"

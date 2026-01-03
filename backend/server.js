@@ -31,7 +31,7 @@ const userRoutes = require('./routes/userRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
 const faqRoutes = require('./routes/faqRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
-const contactRoutes = require('./routes/contactRoutes');
+// const contactRoutes = require('./routes/contactRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 
 // Import middleware
@@ -141,7 +141,8 @@ app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/faq', faqRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/images', uploadRoutes);
-app.use('/api/contact', contactRoutes);
+app.use('/api/public/contact', require('./routes/public/contactRoutes'));
+app.use('/api/admin/contact', require('./routes/admin/contactRoutes'));
 app.use('/api/stats', statsRoutes);
 
 // Root endpoint

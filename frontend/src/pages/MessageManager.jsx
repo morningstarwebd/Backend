@@ -16,9 +16,9 @@ const MessageManager = () => {
 
     const fetchMessages = async () => {
         try {
-            const response = await api.get('/contact');
+            const response = await api.get('/admin/contact');
             if (response.data.success) {
-                setMessages(response.data.data.data);
+                setMessages(response.data.data || []);
             }
         } catch (error) {
             toast.error('Failed to fetch messages');
@@ -30,7 +30,7 @@ const MessageManager = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this message?')) {
             try {
-                await api.delete(`/contact/${id}`);
+                await api.delete(`/admin/contact/${id}`);
                 toast.success('Message deleted successfully');
                 fetchMessages();
             } catch (error) {
@@ -42,7 +42,7 @@ const MessageManager = () => {
     const markAsRead = async (message) => {
         try {
             if (message.status === 'new') {
-                await api.put(`/contact/${message.id}`, { status: 'read' });
+                await api.put(`/admin/contact/${message.id}`, { status: 'read' });
                 fetchMessages();
             }
         } catch (error) {
@@ -55,14 +55,14 @@ const MessageManager = () => {
         markAsRead(message);
     };
 
-    const filteredMessages = messages.filter(m =>
-        m.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        m.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredMessages = (Array.isArray(messages) ? messages : []).filter(m =>
+        m.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        m.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <h1 className="gradient-text" style={{ fontSize: '2rem' }}>Message Manager</h1>
             </div>
 
@@ -89,8 +89,8 @@ const MessageManager = () => {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <div className="glass" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div className="glass" style={{ borderRadius: '1rem', overflowX: 'auto' }}>
+                    <table className="mobile-card-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(255,255,255,0.05)', textAlign: 'left' }}>
                                 <th style={{ padding: '1rem' }}>Date</th>
@@ -106,15 +106,15 @@ const MessageManager = () => {
                                     borderBottom: '1px solid rgba(255,255,255,0.05)',
                                     background: msg.status === 'new' ? 'rgba(99, 102, 241, 0.05)' : 'transparent'
                                 }}>
-                                    <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
+                                    <td data-label="Date" style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
                                         {new Date(msg.created_at).toLocaleDateString()}
                                     </td>
                                     <td style={{ padding: '1rem' }}>
                                         <div style={{ fontWeight: 'bold' }}>{msg.name}</div>
                                         <div style={{ fontSize: '0.875rem', color: 'var(--text-dim)' }}>{msg.email}</div>
                                     </td>
-                                    <td style={{ padding: '1rem' }}>{msg.subject}</td>
-                                    <td style={{ padding: '1rem' }}>
+                                    <td data-label="Subject" style={{ padding: '1rem' }}>{msg.subject}</td>
+                                    <td data-label="Status" style={{ padding: '1rem' }}>
                                         <span style={{
                                             padding: '0.25rem 0.75rem',
                                             borderRadius: '1rem',
@@ -126,7 +126,7 @@ const MessageManager = () => {
                                             {msg.status}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                    <td data-label="Actions" style={{ padding: '1rem', textAlign: 'right' }}>
                                         <button
                                             onClick={() => openViewModal(msg)}
                                             className="btn-outline"

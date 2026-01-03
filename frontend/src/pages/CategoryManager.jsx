@@ -27,7 +27,7 @@ const CategoryManager = () => {
         try {
             const response = await api.get('/categories');
             if (response.data.success) {
-                setCategories(response.data.data);
+                setCategories(response.data.data || []);
             }
         } catch (error) {
             toast.error('Failed to fetch categories');
@@ -82,14 +82,14 @@ const CategoryManager = () => {
         setIsModalOpen(true);
     };
 
-    const filteredCategories = categories.filter(c =>
-        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.type.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredCategories = (Array.isArray(categories) ? categories : []).filter(c =>
+        c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c.type?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <h1 className="gradient-text" style={{ fontSize: '2rem' }}>Category Manager</h1>
                 <button
                     onClick={() => { resetForm(); setIsModalOpen(true); }}
@@ -122,8 +122,8 @@ const CategoryManager = () => {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <div className="glass" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div className="glass" style={{ borderRadius: '1rem', overflowX: 'auto' }}>
+                    <table className="mobile-card-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(255,255,255,0.05)', textAlign: 'left' }}>
                                 <th style={{ padding: '1rem' }}>Name</th>
@@ -135,8 +135,8 @@ const CategoryManager = () => {
                         <tbody>
                             {filteredCategories.map(cat => (
                                 <tr key={cat.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <td style={{ padding: '1rem' }}>{cat.name}</td>
-                                    <td style={{ padding: '1rem' }}>
+                                    <td data-label="Name" style={{ padding: '1rem' }}>{cat.name}</td>
+                                    <td data-label="Type" style={{ padding: '1rem' }}>
                                         <span style={{
                                             padding: '0.25rem 0.75rem',
                                             borderRadius: '1rem',
@@ -148,7 +148,7 @@ const CategoryManager = () => {
                                             {cat.type}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem' }}>
+                                    <td data-label="Status" style={{ padding: '1rem' }}>
                                         <span style={{
                                             padding: '0.25rem 0.75rem',
                                             borderRadius: '1rem',
@@ -159,7 +159,7 @@ const CategoryManager = () => {
                                             {cat.status}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                    <td data-label="Actions" style={{ padding: '1rem', textAlign: 'right' }}>
                                         <button
                                             onClick={() => openEditModal(cat)}
                                             className="btn-outline"

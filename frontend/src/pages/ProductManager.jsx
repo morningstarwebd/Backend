@@ -28,7 +28,7 @@ const ProductManager = () => {
         try {
             const response = await api.get('/products');
             if (response.data.success) {
-                setProducts(response.data.data.data); // data.data.data because of pagination wrapper { data: { data: [], pagination: {} } }
+                setProducts(response.data.data || []);
             }
         } catch (error) {
             toast.error('Failed to fetch products');
@@ -84,14 +84,14 @@ const ProductManager = () => {
         setIsModalOpen(true);
     };
 
-    const filteredProducts = products.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredProducts = (Array.isArray(products) ? products : []).filter(p =>
+        p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.category?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <h1 className="gradient-text" style={{ fontSize: '2rem' }}>Product Manager</h1>
                 <button
                     onClick={() => { resetForm(); setIsModalOpen(true); }}
@@ -124,8 +124,8 @@ const ProductManager = () => {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <div className="glass" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div className="glass" style={{ borderRadius: '1rem', overflowX: 'auto' }}>
+                    <table className="mobile-card-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(255,255,255,0.05)', textAlign: 'left' }}>
                                 <th style={{ padding: '1rem' }}>Name</th>
@@ -138,8 +138,8 @@ const ProductManager = () => {
                         <tbody>
                             {filteredProducts.map(product => (
                                 <tr key={product.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <td style={{ padding: '1rem' }}>{product.name}</td>
-                                    <td style={{ padding: '1rem' }}>
+                                    <td data-label="Name" style={{ padding: '1rem' }}>{product.name}</td>
+                                    <td data-label="Category" style={{ padding: '1rem' }}>
                                         <span style={{
                                             padding: '0.25rem 0.75rem',
                                             borderRadius: '1rem',
@@ -150,9 +150,9 @@ const ProductManager = () => {
                                             {product.category}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem' }}>${product.price}</td>
-                                    <td style={{ padding: '1rem' }}>{product.stock}</td>
-                                    <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                    <td data-label="Price" style={{ padding: '1rem' }}>${product.price}</td>
+                                    <td data-label="Stock" style={{ padding: '1rem' }}>{product.stock}</td>
+                                    <td data-label="Actions" style={{ padding: '1rem', textAlign: 'right' }}>
                                         <button
                                             onClick={() => openEditModal(product)}
                                             className="btn-outline"

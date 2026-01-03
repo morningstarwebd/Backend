@@ -26,7 +26,7 @@ const UserManager = () => {
         try {
             const response = await api.get('/users');
             if (response.data.success) {
-                setUsers(response.data.data.data);
+                setUsers(response.data.data || []);
             }
         } catch (error) {
             toast.error('Failed to fetch users');
@@ -64,14 +64,14 @@ const UserManager = () => {
         setFormData({ username: '', email: '', password: '', role: 'admin' });
     };
 
-    const filteredUsers = users.filter(u =>
-        u.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        u.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredUsers = (Array.isArray(users) ? users : []).filter(u =>
+        u.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        u.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="page-header">
                 <h1 className="gradient-text" style={{ fontSize: '2rem' }}>User Manager</h1>
                 <button
                     onClick={() => { resetForm(); setIsModalOpen(true); }}
@@ -104,8 +104,8 @@ const UserManager = () => {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <div className="glass" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div className="glass" style={{ borderRadius: '1rem', overflowX: 'auto' }}>
+                    <table className="mobile-card-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(255,255,255,0.05)', textAlign: 'left' }}>
                                 <th style={{ padding: '1rem' }}>Username</th>
@@ -118,12 +118,12 @@ const UserManager = () => {
                         <tbody>
                             {filteredUsers.map(user => (
                                 <tr key={user.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <td style={{ padding: '1rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <td data-label="Username" style={{ padding: '1rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                         <FaUserShield style={{ color: 'var(--primary)' }} />
                                         {user.username}
                                     </td>
-                                    <td style={{ padding: '1rem' }}>{user.email}</td>
-                                    <td style={{ padding: '1rem' }}>
+                                    <td data-label="Email" style={{ padding: '1rem' }}>{user.email}</td>
+                                    <td data-label="Role" style={{ padding: '1rem' }}>
                                         <span style={{
                                             padding: '0.25rem 0.75rem',
                                             borderRadius: '1rem',
@@ -135,10 +135,10 @@ const UserManager = () => {
                                             {user.role}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1rem', color: 'var(--text-dim)' }}>
+                                    <td data-label="Last Login" style={{ padding: '1rem', color: 'var(--text-dim)' }}>
                                         {user.last_login ? new Date(user.last_login).toLocaleString() : 'Never'}
                                     </td>
-                                    <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                    <td data-label="Actions" style={{ padding: '1rem', textAlign: 'right' }}>
                                         <button
                                             onClick={() => handleDelete(user.id)}
                                             className="btn-outline"
