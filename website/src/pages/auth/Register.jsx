@@ -34,8 +34,12 @@ const Register = () => {
                 password: formData.password
             });
 
-            toast.success('Registration successful! Please login.');
-            navigate('/login');
+            // Auto Login
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+
+            toast.success('Registration successful! Welcome!');
+            navigate('/dashboard');
         } catch (error) {
             console.error('Registration error:', error);
             toast.error(error.response?.data?.message || 'Registration failed');

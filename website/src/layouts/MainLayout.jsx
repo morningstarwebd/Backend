@@ -1,10 +1,29 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
 const MainLayout = ({ children }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        } else {
+            setUser(null);
+        }
+        setMobileMenuOpen(false); // Close mobile menu on route change
+    }, [location]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+        navigate('/login');
+    };
 
     const isActive = (path) => location.pathname === path;
 
@@ -22,8 +41,17 @@ const MainLayout = ({ children }) => {
                         <Link to="/about" className={`public-nav-link ${isActive('/about') ? 'active' : ''}`}>About</Link>
                         <Link to="/contact" className={`public-nav-link ${isActive('/contact') ? 'active' : ''}`}>Contact</Link>
                         <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.1)', margin: '0 1rem' }}></div>
-                        <Link to="/login" className="public-nav-link">Login</Link>
-                        <Link to="/register" className="btn btn-primary public-nav-btn">Sign Up</Link>
+                        {user ? (
+                            <>
+                                <Link to="/dashboard" className={`public-nav-link ${isActive('/dashboard') ? 'active' : ''}`}>Dashboard</Link>
+                                <button onClick={handleLogout} className="btn btn-primary public-nav-btn">Logout</button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/login" className="public-nav-link">Login</Link>
+                                <Link to="/register" className="btn btn-primary public-nav-btn">Sign Up</Link>
+                            </>
+                        )}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -44,8 +72,17 @@ const MainLayout = ({ children }) => {
                             <Link to="/about" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>About</Link>
                             <Link to="/contact" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
                             <hr style={{ width: '100%', borderColor: 'rgba(255,255,255,0.1)' }} />
-                            <Link to="/login" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Login</Link>
-                            <Link to="/register" className="btn btn-primary mobile-nav-btn" onClick={() => setMobileMenuOpen(false)}>Sign Up</Link>
+                            {user ? (
+                                <>
+                                    <Link to="/dashboard" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Dashboard</Link>
+                                    <button onClick={handleLogout} className="btn btn-primary mobile-nav-btn">Logout</button>
+                                </>
+                            ) : (
+                                <>
+                                    <Link to="/login" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                                    <Link to="/register" className="btn btn-primary mobile-nav-btn" onClick={() => setMobileMenuOpen(false)}>Sign Up</Link>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
