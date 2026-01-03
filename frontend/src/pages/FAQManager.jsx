@@ -87,10 +87,12 @@ const FAQManager = () => {
         setIsModalOpen(true);
     };
 
-    const filteredFaqs = (Array.isArray(faqs) ? faqs : []).filter(f =>
-        f.question?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        f.answer?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredFaqs = (Array.isArray(faqs) ? faqs : [])
+        .filter(f => f.id && f.question) // Filter out empty entries
+        .filter(f =>
+            f.question?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            f.answer?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
     return (
         <div>
