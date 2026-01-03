@@ -62,4 +62,11 @@ router.put('/:id', protect, idParamValidation, validate, faqController.updateFAQ
  */
 router.delete('/:id', protect, idParamValidation, validate, faqController.deleteFAQ);
 
+/**
+ * @route   DELETE /api/faq/cleanup/empty
+ * @desc    Cleanup empty/invalid FAQ rows
+ * @access  Protected
+ */
+router.delete('/cleanup/empty', protect, faqController.cleanupFAQs);
+
 module.exports = router;

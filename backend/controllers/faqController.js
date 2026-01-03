@@ -207,6 +207,22 @@ const reorderFAQs = async (req, res) => {
     }
 };
 
+/**
+ * Cleanup empty/invalid FAQ rows
+ * DELETE /api/faq/cleanup
+ */
+const cleanupFAQs = async (req, res) => {
+    try {
+        const { cleanupEmptyRows, SHEETS } = require('../config/googleSheets');
+        const deletedCount = await cleanupEmptyRows(SHEETS.FAQS, 'question');
+
+        return successResponse(res, { deletedCount }, `Cleaned up ${deletedCount} empty FAQ rows`);
+    } catch (error) {
+        console.error('Cleanup FAQs error:', error.message);
+        return errorResponse(res, 'Failed to cleanup FAQs', 500);
+    }
+};
+
 module.exports = {
     getAllFAQs,
     getFAQById,
@@ -214,5 +230,6 @@ module.exports = {
     createFAQ,
     updateFAQ,
     deleteFAQ,
-    reorderFAQs
+    reorderFAQs,
+    cleanupFAQs
 };

@@ -386,6 +386,50 @@ async function initializeSheet(sheetName) {
     }
 }
 
+/**
+ * Cleanup empty/invalid rows from a sheet
+ * Deletes rows that don't have an ID or required fields
+ * @param {string} sheetName - Name of the sheet
+ * @param {string} requiredField - Field that must have a value (e.g., 'question', 'name')
+ * @returns {Promise<number>} Number of rows deleted
+ */
+async function cleanupEmptyRows(sheetName, requiredField = 'id') {
+    try {
+        // Clear cache first to get fresh data
+        clearCacheForSheet(sheetName);
+
+        const data = await getSheetData(sheetName);
+
+        // Find rows without ID or without required field
+        const emptyRows = data.filter(row => !row.id || (requiredField !== 'id' && !row[requiredField]));
+
+        if (emptyRows.length === 0) {
+            return 0;
+        }
+
+        // Delete from bottom to top to maintain row indices
+        const sortedByIndex = emptyRows.sort((a, b) => b._rowIndex - a._rowIndex);
+
+        let deletedCount = 0;
+        for (const row of sortedByIndex) {
+            try {
+                await deleteRow(sheetName, row._rowIndex);
+                deletedCount++;
+            } catch (error) {
+                console.error(`Failed to delete row at index ${row._rowIndex}:`, error.message);
+            }
+        }
+
+        // Clear cache after cleanup
+        clearCacheForSheet(sheetName);
+
+        return deletedCount;
+    } catch (error) {
+        console.error(`Error cleaning up empty rows from ${sheetName}:`, error.message);
+        throw error;
+    }
+}
+
 module.exports = {
     SHEETS,
     SHEET_HEADERS,
@@ -399,5 +443,6 @@ module.exports = {
     findByField,
     initializeSheet,
     clearCacheForSheet,
-    clearAllCache
+    clearAllCache,
+    cleanupEmptyRows
 };
