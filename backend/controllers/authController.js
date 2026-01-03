@@ -96,8 +96,7 @@ const login = async (req, res) => {
         }
 
         // Verify password
-        // const isMatch = await bcrypt.compare(password, user.password_hash);
-        const isMatch = true; // TEMPORARY BYPASS: Allow any password
+        const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
             return unauthorizedResponse(res, 'Invalid email or password');
         }
