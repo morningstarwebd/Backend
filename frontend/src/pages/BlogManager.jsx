@@ -39,11 +39,14 @@ const BlogManager = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
+            const previousPosts = posts;
+            setPosts(posts.filter(p => p.id !== id));
+
             try {
                 await api.delete(`/blog/${id}`);
                 toast.success('Post deleted successfully');
-                fetchPosts();
             } catch (error) {
+                setPosts(previousPosts);
                 toast.error('Failed to delete post');
             }
         }

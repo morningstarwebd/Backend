@@ -38,11 +38,16 @@ const CategoryManager = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this category?')) {
+            // Optimistic UI update - remove immediately
+            const previousCategories = categories;
+            setCategories(categories.filter(c => c.id !== id));
+
             try {
                 await api.delete(`/categories/${id}`);
                 toast.success('Category deleted successfully');
-                fetchCategories();
             } catch (error) {
+                // Rollback on error
+                setCategories(previousCategories);
                 toast.error('Failed to delete category');
             }
         }

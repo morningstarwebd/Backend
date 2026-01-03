@@ -39,11 +39,14 @@ const ProductManager = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
+            const previousProducts = products;
+            setProducts(products.filter(p => p.id !== id));
+
             try {
                 await api.delete(`/products/${id}`);
                 toast.success('Product deleted successfully');
-                fetchProducts();
             } catch (error) {
+                setProducts(previousProducts);
                 toast.error('Failed to delete product');
             }
         }

@@ -37,11 +37,14 @@ const UserManager = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this user?')) {
+            const previousUsers = users;
+            setUsers(users.filter(u => u.id !== id));
+
             try {
                 await api.delete(`/users/${id}`);
                 toast.success('User deleted successfully');
-                fetchUsers();
             } catch (error) {
+                setUsers(previousUsers);
                 toast.error('Failed to delete user');
             }
         }

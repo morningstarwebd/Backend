@@ -29,11 +29,14 @@ const MessageManager = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this message?')) {
+            const previousMessages = messages;
+            setMessages(messages.filter(m => m.id !== id));
+
             try {
                 await api.delete(`/admin/contact/${id}`);
                 toast.success('Message deleted successfully');
-                fetchMessages();
             } catch (error) {
+                setMessages(previousMessages);
                 toast.error('Failed to delete message');
             }
         }

@@ -40,11 +40,14 @@ const FAQManager = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this FAQ?')) {
+            const previousFaqs = faqs;
+            setFaqs(faqs.filter(f => f.id !== id));
+
             try {
                 await api.delete(`/faq/${id}`);
                 toast.success('FAQ deleted successfully');
-                fetchFaqs();
             } catch (error) {
+                setFaqs(previousFaqs);
                 toast.error('Failed to delete FAQ');
             }
         }
